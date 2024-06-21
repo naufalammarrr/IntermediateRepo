@@ -31,13 +31,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        showLoading(true)
+        //showLoading(true)
         viewModel.getSession().observe(this) { user ->
             val token = user.token
             viewModel.getStories(token)
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
+            } else {
+                val token = user.token
+                viewModel.getStories(token)
             }
         }
 
@@ -54,24 +57,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        viewModel.getSession().observe(this) {
-            Log.d("Islogin value", it.toString())
-            if (!it.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-            }
-        }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.logout) {
-            viewModel.logout()
+        when (item.itemId) {
+            R.id.logout -> {
+                Log.d("Test pencet logout", "yyyyyy")
+            }
         }
         return super.onOptionsItemSelected(item)
     }
